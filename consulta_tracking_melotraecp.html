@@ -60,7 +60,7 @@
     }
     .preview-img {
       width: 100%;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       border-radius: 0.5rem;
       cursor: zoom-in;
       transition: transform 0.3s ease;
@@ -69,6 +69,14 @@
       transform: scale(2);
       cursor: zoom-out;
       z-index: 999;
+    }
+    .external-link {
+      display: block;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
+      color: #007bff;
     }
   </style>
 </head>
@@ -110,21 +118,44 @@
       const text = await res.text();
       resultadoDiv.innerHTML = "";
 
-      const driveMatch = text.match(/https:\\/\\/drive\\.google\\.com\\/file\\/d\\/([\\w-]+)\\//);
-      if (driveMatch) {
-        const fileId = driveMatch[1];
+      const driveRegex = /(https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/view\?[^\\s]*)/;
+      const match = text.match(driveRegex);
+      let mensajeSinLink = text;
+
+      if (match) {
+        const fullLink = match[1];
+        const fileId = match[2];
+        const imageUrl = `https://drive.google.com/uc?id=${fileId}`;
+
+        // Imagen preview
         const img = document.createElement("img");
-        img.src = `https://drive.google.com/uc?id=${fileId}`;
+        img.src = imageUrl;
         img.className = "preview-img";
-        img.alt = "Vista previa de la etiqueta";
+        img.alt = "Vista previa del paquete";
         img.addEventListener("click", () => {
           img.classList.toggle("zoomed");
         });
+
+        // Botón para abrir imagen en nueva pestaña
+        const link = document.createElement("a");
+        link.href = fullLink;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.className = "external-link";
+        link.innerText = "🔍 Ver imagen en tamaño completo";
+
         resultadoDiv.appendChild(img);
+        resultadoDiv.appendChild(link);
+
+        // Limpiar mensaje
+        mensajeSinLink = text.replace(fullLink, "").trim();
       }
 
-      const mensaje = text.replace(/https:\\/\\/drive\\.google\\.com\\/file\\/d\\/([\\w-]+)\\/view\\?[^\\s]*/, '').trim();
-      resultadoDiv.innerText += mensaje;
+      // Mostrar mensaje limpio
+      const mensaje = document.createElement("div");
+      mensaje.innerText = mensajeSinLink;
+      resultadoDiv.appendChild(mensaje);
+
       resultadoDiv.style.display = "block";
 
     } catch (error) {
