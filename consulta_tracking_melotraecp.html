@@ -59,7 +59,7 @@
       white-space: pre-line;
     }
     .link-block {
-      margin-bottom: 1rem;
+      margin-top: 1rem;
       background: #fff3cd;
       padding: 0.8rem;
       border-left: 4px solid #ffc107;
@@ -110,27 +110,31 @@
       const text = await res.text();
       resultadoDiv.innerHTML = "";
 
-      // Detectar enlace funcional
+      // Buscar link funcional
       const match = text.match(/https:\/\/drive\.google\.com\/uc\?id=([a-zA-Z0-9_-]+)/);
       let mensajeLimpio = text;
+      let fullLink = null;
 
       if (match) {
-        const fullLink = match[0];
+        fullLink = match[0];
+        mensajeLimpio = mensajeLimpio.replace(fullLink, "").trim();
+      }
 
+      // Mostrar el mensaje principal
+      const mensaje = document.createElement("div");
+      mensaje.innerText = mensajeLimpio;
+      resultadoDiv.appendChild(mensaje);
+
+      // Mostrar el link al final (si existe)
+      if (fullLink) {
         const aviso = document.createElement("div");
         aviso.className = "link-block";
         aviso.innerHTML = `
           <strong>📄 Haz clic aquí para ver la imagen del label de recepción de tu paquete:</strong><br>
-          <a href="${fullLink}" target="_blank">${fullLink}</a>
+          <a href="${fullLink}" target="_blank">Ver imagen</a>
         `;
         resultadoDiv.appendChild(aviso);
-
-        mensajeLimpio = mensajeLimpio.replace(fullLink, "").trim();
       }
-
-      const mensaje = document.createElement("div");
-      mensaje.innerText = mensajeLimpio;
-      resultadoDiv.appendChild(mensaje);
 
       resultadoDiv.style.display = "block";
 
