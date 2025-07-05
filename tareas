@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tablero de Tareas – Modo Oscuro Interactivo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #121212;
+      --header-bg: #1f1f1f;
+      --card-bg-1: #1e1e1e;
+      --card-bg-2: #242424;
+      --card-bg-3: #282828;
+      --text-color: #e0e0e0;
+      --meta-color: #a0a0a0;
+      --accent-color: #bb86fc;
+      --shadow: rgba(0, 0, 0, 0.5);
+      --radius: 8px;
+      --padding: 16px;
+      --title-color-1: #ff8a80;  /* rojo claro */
+      --title-color-2: #80d8ff;  /* azul claro */
+      --title-color-3: #ccff90;  /* verde claro */
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    html, body {
+      height: 100%;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--header-bg);
+      box-shadow: 0 1px 0 var(--shadow);
+      padding: var(--padding);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-transform: uppercase;
+    }
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--padding);
+    }
+    .task-list {
+      list-style: none;
+    }
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--padding);
+      margin-bottom: var(--padding);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 3px var(--shadow);
+      background: var(--card-bg-1);
+      transition: transform 0.2s;
+    }
+    .task:nth-child(2n) { background: var(--card-bg-2); }
+    .task:nth-child(3n) { background: var(--card-bg-3); }
+    .task:hover {
+      transform: translateY(-2px);
+    }
+    .task-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .task-title,
+    .priority,
+    .warehouse,
+    .task-meta,
+    .badge {
+      text-transform: uppercase;
+    }
+    .task-title {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .priority {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    .priority-high { color: #ff5252; }
+    .priority-medium { color: #ffd740; }
+    .priority-low { color: #69f0ae; }
+    .warehouse {
+      font-size: 1.5rem;
+    }
+    .task-meta {
+      font-size: 1rem;
+      color: var(--meta-color);
+    }
+    .badge {
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid var(--meta-color);
+      color: var(--meta-color);
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 0.875rem;
+    }
+    /* Colores de título alternos según posición */
+    .task-list .task:nth-child(3n+1) .task-title { color: var(--title-color-1); }
+    .task-list .task:nth-child(3n+2) .task-title { color: var(--title-color-2); }
+    .task-list .task:nth-child(3n)   .task-title { color: var(--title-color-3); }
+    /* Colores vivos para warehouse */
+    .task-list .task:nth-child(3n+1) .warehouse { color: #ff1744; }
+    .task-list .task:nth-child(3n+2) .warehouse { color: #2979ff; }
+    .task-list .task:nth-child(3n)   .warehouse { color: #00e676; }
+  </style>
+</head>
+<body>
+  <header>📋 TABLERO DE TAREAS</header>
+  <main>
+    <ul class="task-list">
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">CAMBIO DE INSTRUCCIÓN AÉREO-MARÍTIMO</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR24553</span>
+          </div>
+          <div class="task-meta">ORLANDO – 04/07/2025 10:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">REVISAR SOLICITUD DE SEGURO</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR34567</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 11:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">MARCAR TAREA COMPLETADA</span>
+            <span class="priority priority-low">BAJA</span>
+            <span class="warehouse">WR12345</span>
+          </div>
+          <div class="task-meta">ORLANDO – 03/07/2025 16:45</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <!-- TAREAS ADICIONALES -->
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">SOLICITUD DE FACTURA</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR45678</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 12:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">NOTIFICAR AL CLIENTE: ARTÍCULO NO SE PUEDE ENVIAR AÉREO</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR56789</span>
+          </div>
+          <div class="task-meta">ORLANDO – 04/07/2025 12:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">NOTIFICAR AL CLIENTE: ARTÍCULO NO SE PUEDE ENVIAR MARÍTIMO</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR67890</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 13:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">REVISAR DOCUMENTACIÓN ADUANAL</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR78901</span>
+          </div>
+          <div class="task-meta">ORLANDO – 04/07/2025 13:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">ACTUALIZAR ESTADO DE TRACKING</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR89012</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 14:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">PREPARAR REMESA PARA SALIDA MARÍTIMA</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR90123</span>
+          </div>
+          <div class="task-meta">ORLANDO – 04/07/2025 14:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">VERIFICAR INVENTARIO EN ALMACÉN</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR01234</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 15:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">GENERAR ETIQUETA DE REMISIÓN</span>
+            <span class="priority priority-low">BAJA</span>
+            <span class="warehouse">WR12346</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 15:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">ENVIAR CONFIRMACIÓN AL CLIENTE</span>
+            <span class="priority priority-low">BAJA</span>
+            <span class="warehouse">WR23456</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 16:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">REVISAR LÍMITE DE PESO</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR34568</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 16:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">GESTIONAR PAGO DE ARANCELES</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR45679</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 17:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">PROGRAMAR RETIRO CON TRANSPORTISTA</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR56780</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 17:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">VERIFICAR SEGURO CONTRATADO</span>
+            <span class="priority priority-low">BAJA</span>
+            <span class="warehouse">WR67891</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 18:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">COMPROBAR DIRECCIÓN DE ENTREGA</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR78902</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 18:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">ASIGNAR GUÍA AL PAQUETE</span>
+            <span class="priority priority-low">BAJA</span>
+            <span class="warehouse">WR89023</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 19:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">VALIDAR FORMATO DE ETIQUETA</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR90124</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 19:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">COORDINAR RECOGIDA EN PUERTO</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR01235</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 20:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">ANALIZAR COSTO DE TRANSPORTE</span>
+            <span class="priority priority-medium">MEDIA</span>
+            <span class="warehouse">WR12347</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 20:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">NOTIFICAR CAMBIO DE ITINERARIO</span>
+            <span class="priority priority-high">ALTA</span>
+            <span class="warehouse">WR23457</span>
+          </div>
+          <div class="task-meta">MIAMI – 04/07/2025 21:00</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+      <li class="task">
+        <div>
+          <div class="task-header">
+            <span class="task-title">ARCHIVAR DOCUMENTOS DE ENVÍO</span>
+            <span class="priority priority-low">BAJA</span>
+            <span class="warehouse">WR34569</span>
+          </div>
+          <div class="task-meta">ORLANDDO – 04/07/2025 21:30</div>
+        </div>
+        <span class="badge" data-status="pendiente">PENDIENTE</span>
+      </li>
+    </ul>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.badge').forEach(badge => {
+        badge.addEventListener('click', () => {
+          const status = badge.dataset.status;
+          if (status === 'pendiente') {
+            if (confirm('¿Deseas iniciar esta tarea?')) {
+              badge.dataset.status = 'en_curso';
+              badge.textContent = 'EN CURSO';
+            }
+          } else if (status === 'en_curso') {
+            if (confirm('¿Has completado esta tarea?')) {
+              const taskItem = badge.closest('.task');
+              if (taskItem) taskItem.remove();
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
